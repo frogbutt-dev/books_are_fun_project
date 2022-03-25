@@ -1,10 +1,15 @@
-{% extends "rango/base.html" %}
-{% block title %}Leave Review{% endblock %}
-{% block body_block %}
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
 
+{% block title_block %}
+Leave Review
+{% endblock %}
+
+
+{% block body_block %}
 <div class="jumbotron p-4">
     <div class="container">
-        <h1 class="jumbotron-heading">Review for "{{ book.title }}"</h1>
+        <h1 class="jumbotron-heading">Leave a Review for "{{ book.title }}"</h1>
     </div>
 </div>
 <div class="container">
