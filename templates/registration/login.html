@@ -13,21 +13,27 @@
 </div>
     
 <div class="container">
-    <form class="form-signin" role="form" method="post" action=".">
-    {% csrf_token %}
-    <label for="inputUsername" class="sr-only">Username</label>
-    
-    <input type="text" name="username" id="id_username" class="form-control"
-            placeholder="Username" required autofocus>
-    
-    <label for="inputPassword" class="sr-only">Password</label>
-    
-    <input type="password" name="password" id="id_password" class="form-control"
-            placeholder="Password" required>
-            
+    <div class="form-group">
+        <form class="form-signin" role="form" method="post" action=".">
+        {% csrf_token %}
+        <label for="inputUsername" class="sr-only">Username</label>
+        
+        <input type="text" name="username" id="id_username" class="form-control"
+                placeholder="Username" required autofocus>
+        
+        <label for="inputPassword" class="sr-only">Password</label>
+        
+        <input type="password" name="password" id="id_password" class="form-control"
+                placeholder="Password" required>
+           
+    </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit"
             value="Submit">Sign in</button>
+    <div class="login_message">
+        <p>Don’t have an account ? <a href="{% url 'registration_register' %}"> Sign up </a> </p>
+    </div>
     
     </form>
+    
 </div>
 {% endblock %}
