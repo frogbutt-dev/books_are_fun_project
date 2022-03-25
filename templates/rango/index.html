@@ -53,7 +53,7 @@ Homepage
                     <ul class="list-group">
                         {% for review in reviews %}
                         <li class="list-group-item">
-                            <a href="{% url 'rango:show_book' review.slug %}">{{ review.title }}</a>
+                            <a href="{% url 'rango:show_book' review.book.slug %}">{{ review.title }}</a>
                         </li>
                         {% endfor %}
                     </ul>
