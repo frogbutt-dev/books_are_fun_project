@@ -25,6 +25,7 @@
 <body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark p-0">
+            
             <a class="navbar-brand p-2" href="{% url 'rango:index' %}">Books Are Fun</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +37,7 @@
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:contact_us' %}">Contact Us</a></li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_book' %}">Add Book</a>
                     <li class="nav-item"><a class="nav-link" href="{% url 'auth_password_change' %}">Change Password</a>
                     </li>
@@ -45,6 +46,8 @@
                     </li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                     {% endif %}
+                    <li class="nav-item"><input class="form-control mr-sm-2" type="text" placeholder="Search"></li>
+                    <li class="nav-item"><button class="btn btn-primary" type="submit">Search</button></li>
                 </ul>
             </div>
         </nav>
