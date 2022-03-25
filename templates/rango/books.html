@@ -1,21 +1,21 @@
 <ul class="nav flex-column">
-{% if categories %}
-    {% for c in categories %}
-    {% if c == current_category %}
-        <li class="nav-item">
-        <a class="nav-link active" href="{% url 'rango:show_category' c.slug %}">
-            <span data-feather="archive"></span>{{ c.name }}
+    {% if books %}
+    {% for b in books %}
+    {% if b == current_book %}
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'rango:show_book' b.slug %}">
+            <span data-feather="archive"></span>{{ b.title }}
         </a>
-        </li>
+    </li>
     {% else %}
-        <li class="nav-item">
-        <a class="nav-link" href="{% url 'rango:show_category' c.slug %}">
-            <span data-feather="archive"></span>{{ c.name }}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'rango:show_book' b.slug %}">
+            <span data-feather="archive"></span>{{ b.title }}
         </a>
-        </li>
+    </li>
     {% endif %}
     {% endfor %}
-{% else %}
-    <li class="nav-item">There are no categories present.</li>
-{% endif %}
+    {% else %}
+    <li class="nav-item">There are no books present.</li>
+    {% endif %}
 </ul>

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 #from django.http import HttpResponse
 from rango.models import Book, Review
-#from rango.forms import CategoryForm, PageForm
+from rango.forms import BookForm, ReviewForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -14,11 +14,11 @@ def index(request):
     # Retrieve the top 5 only -- or all if less than 5.
     # Place the list in our context_dict dictionary (with our boldmessage!)
     # that will be passed to the template engine.
-    book_list = None
-    review_list = None
-    
+    book_list = Book.objects.all()
+    review_list = Review.objects.order_by('-upvotes')[:5]
+
     context_dict = {}
-    context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
+    context_dict['boldmessage'] = 'What book are you going to read today?'
     context_dict['books'] = book_list
     context_dict['reviews'] = review_list
 
@@ -29,6 +29,7 @@ def index(request):
     # Return response back to the user, updating any cookies that need changed.
     return response
 
+
 def about(request):
     context_dict = {}
     visitor_cookie_handler(request)
@@ -36,19 +37,44 @@ def about(request):
     response = render(request, 'rango/about.html', context=context_dict)
     return response
 
-def contact_us():
+
+def show_book(request, book_title_slug):
+    # Create a context dictionary which we can pass
+    # to the template rendering engine.
     context_dict = {}
-    response = render(request, 'rango/contact_us.html', context=context_dict)
-    return response
+    try:
+        # Can we find a category name slug with the given name?
+        # If we can't, the .get() method raises a DoesNotExist exception.
+        # The .get() method returns one model instance or raises an exception.
+        book = Book.objects.get(slug=book_title_slug)
+        # Retrieve all of the associated pages.
+        # The filter() will return a list of page objects or an empty list.
+        reviews = Review.objects.filter(book=book)
+        # Adds our results list to the template context under name pages.
+        context_dict['reviews'] = reviews
+        # We also add the category object from
+        # the database to the context dictionary.
+        # We'll use this in the template to verify that the category exists.
+        context_dict['book'] = book
+    except Book.DoesNotExist:
+        # We get here if we didn't find the specified category.
+        # Don't do anything -
+        # the template will display the "no category" message for us.
+        context_dict['book'] = None
+        context_dict['reviews'] = None
+
+    # Go render the response and return it to the client.
+    return render(request, 'rango/book.html', context=context_dict)
+
 
 @login_required
-def add_category(request):
-    form = CategoryForm()
-    
+def add_book(request):
+    form = BookForm()
+
     # A HTTP POST?
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        
+        form = BookForm(request.POST)
+
         # Have we been provided with a valid form?
         if form.is_valid():
             # Save the new category to the database.
@@ -56,48 +82,49 @@ def add_category(request):
             # Now that the category is saved, we could confirm this.
             # For now, just redirect the user back to the index view.
             return redirect('/rango/')
-        
+
         else:
             # The supplied form contained errors -
             # just print them to the terminal.
             print(form.errors)
-    
+
     # Will handle the bad form, new form, or no form supplied cases.
     # Render the form with error messages (if any).
-    return render(request, 'rango/add_category.html', {'form': form})
+    return render(request, 'rango/add_book.html', {'form': form})
+
 
 @login_required
-def add_page(request, category_name_slug):
+def leave_review(request, book_title_slug):
     try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-        category = None
-    
+        book = Book.objects.get(slug=book_title_slug)
+    except Book.DoesNotExist:
+        book = None
+
     # You cannot add a page to a Category that does not exist...
-    if category is None:
+    if book is None:
         return redirect('/rango/')
-    
-    form = PageForm()
-    
+
+    form = ReviewForm()
+
     if request.method == 'POST':
-        form = PageForm(request.POST)
-        
+        form = ReviewForm(request.POST)
+
         if form.is_valid():
-            if category:
-                page = form.save(commit=False)
-                page.category = category
-                page.views = 0
-                page.save()
-                
-                return redirect(reverse('rango:show_category',
-                                        kwargs={'category_name_slug':
-                                                category_name_slug}))
-   
+            if book:
+                review = form.save(commit=False)
+                review.book = book
+                review.upvotes = 0
+                review.save()
+
+                return redirect(reverse('rango:show_book',
+                                        kwargs={'book_title_slug':
+                                                book_title_slug}))
+
     else:
         print(form.errors)
-    
-    context_dict = {'form': form, 'category': category}
-    return render(request, 'rango/add_page.html', context=context_dict)
+
+    context_dict = {'form': form, 'book': book}
+    return render(request, 'rango/leave_review.html', context=context_dict)
 
 # def register(request):
 #     # A boolean value for telling the template
@@ -147,7 +174,7 @@ def add_page(request, category_name_slug):
 #             # Invalid form or forms - mistakes or something else?
 #             # Print problems to the terminal.
 #             print(user_form.errors, profile_form.errors)
-    
+
 #     else:
 #         # Not a HTTP POST, so we render our form using two ModelForm instances.
 #         # These forms will be blank, ready for user input.
@@ -173,11 +200,11 @@ def add_page(request, category_name_slug):
 #         # will raise a KeyError exception.
 #         username = request.POST.get('username')
 #         password = request.POST.get('password')
-        
+
 #         # Use Django's machinery to attempt to see if the username/password
 #         # combination is valid - a User object is returned if it is.
 #         user = authenticate(username=username, password=password)
-        
+
 #         # If we have a User object, the details are correct.
 #         # If None (Python's way of representing the absence of a value), no user
 #         # with matching credentials was found.
@@ -195,7 +222,7 @@ def add_page(request, category_name_slug):
 #             # Bad login details were provided. So we can't log the user in.
 #             print(f"Invalid login details: {username}, {password}")
 #             return HttpResponse("Invalid login details supplied.")
-            
+
 #         # The request is not a HTTP POST, so display the login form.
 #         # This scenario would most likely be a HTTP GET.
 #     else:
@@ -203,9 +230,9 @@ def add_page(request, category_name_slug):
 #         # blank dictionary object...
 #         return render(request, 'rango/login.html')
 
-@login_required
-def restricted(request):
-    return render(request, 'rango/restricted.html')
+
+def contact_us(request):
+    return render(request, 'rango/contact_us.html')
 
 # # Use the login_required() decorator to ensure only those logged in can
 # # access the view.
@@ -217,6 +244,8 @@ def restricted(request):
 #     return redirect(reverse('rango:index'))
 
 # A helper method
+
+
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
     if not val:
@@ -224,21 +253,23 @@ def get_server_side_cookie(request, cookie, default_val=None):
     return val
 
 # Updated the function definition
+
+
 def visitor_cookie_handler(request):
     visits = int(get_server_side_cookie(request, 'visits', '1'))
     last_visit_cookie = get_server_side_cookie(request,
-    'last_visit',
-    str(datetime.now()))
+                                               'last_visit',
+                                               str(datetime.now()))
     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-    '%Y-%m-%d %H:%M:%S')
+                                        '%Y-%m-%d %H:%M:%S')
     # If it's been more than a day since the last visit...
-    if (datetime.now() - last_visit_time).days > 0:
+    if (datetime.now() - last_visit_time).seconds > 0:
         visits = visits + 1
         # Update the last visit cookie now that we have updated the count
         request.session['last_visit'] = str(datetime.now())
     else:
         # Set the last visit cookie
         request.session['last_visit'] = last_visit_cookie
-        
+
     # Update/set the visits cookie
     request.session['visits'] = visits

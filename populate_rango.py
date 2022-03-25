@@ -4,79 +4,114 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 
 import django
 django.setup()
+import datetime
 from rango.models import Book, Review
 
 
 def populate():
-    # First, we will create lists of dictionaries containing the pages
-    # we want to add into each category.
-    # Then we will create a dictionary of dictionaries for our categories.
-    # This might seem a little bit confusing, but it allows us to iterate
-    # through each data structure, and add the data to our models.
 
-    python_pages = [
-        {'title': 'Official Python Tutorial',
-         'url': 'http://docs.python.org/3/tutorial/',
-         'views': 10},
-        {'title': 'How to Think like a Computer Scientist',
-         'url': 'http://www.greenteapress.com/thinkpython/',
-         'views': 40},
-        {'title': 'Learn Python in 10 Minutes',
-         'url': 'http://www.korokithakis.net/tutorials/python/',
-         'views': 20}]
+    reviewForBookOne = [
+        {'title': 'Fantastic read',
+         'rating': 4,
+         'comment': 'The story took me back to my childhood.',
+         'genre': 'Horror',
+         'publishDate': datetime.date(1997, 10, 19),
+         'upvotes': 11, },
+        {'title': 'Highly interesting',
+         'rating': 5,
+         'comment': 'A very interesting book.',
+         'genre': 'Horror',
+         'publishDate': datetime.date(1997, 10, 21),
+         'upvotes': 3, },
+    ]
 
-    django_pages = [
-        {'title': 'Official Django Tutorial',
-         'url': 'https://docs.djangoproject.com/en/2.1/intro/tutorial01/',
-         'views': 15},
-        {'title': 'Django Rocks',
-         'url': 'http://www.djangorocks.com/',
-         'views': 30},
-        {'title': 'How to Tango with Django',
-         'url': 'http://www.tangowithdjango.com/',
-         'views': 25}]
+    reviewForBookTwo = [
+        {'title': 'Brilliant book',
+         'rating': 5,
+         'comment': 'I loved reading it!',
+         'genre': 'Sci-fi',
+         'publishDate': datetime.date(1997, 10, 19),
+         'upvotes': 23, },
+    ]
 
-    other_pages = [
-        {'title': 'Bottle',
-         'url': 'http://bottlepy.org/docs/dev/',
-         'views': 5},
-        {'title': 'Flask',
-         'url': 'http://flask.pocoo.org',
-         'views': 35}]
+    reviewForBookThree = [
+        {'title': 'Boring story',
+         'rating': 2,
+         'comment': 'I did not enjoy reading this book. It was very boring.',
+         'genre': 'Romantic',
+         'publishDate': datetime.date(1997, 10, 19),
+         'upvotes': 0, },
+    ]
 
-    cats = {'Python': {'pages': python_pages, 'views': 128, 'likes': 64},
-            'Django': {'pages': django_pages, 'views': 64, 'likes': 32},
-            'Other Frameworks': {'pages': other_pages, 'views': 32, 'likes': 16},
-            }
+    books = {'Before The Coffee Gets Cold': 
+             {'reviews': reviewForBookOne, 
+              'bookPicture': None, 
+              'isbn': '9781529029581', 
+              'description': 'What would you do if you knew there were creepy robots with shocking habits near the ones you love? The night of the Christening changes everything for Rachel Sparrow, a 24-year-old doctor from New York. One moment, she is discussing sausages with her hilarious friend, Sandie Raymond; the next, watching with horror as creepy robots punch each other. She knows these robots came from Falmouth but she can\'t prove it - at least not without some dirty wigs. The intuitive, friendly woman knows that her quiet life is over. She acquires some dirty wigs and is reborn as the hero who will save the world from creepy robots. However, Rachel finds herself troubled by her quiet ideals and becomes overwhelmed with moral questions. Will her conscience allow her to do whatever is needed to stop the creepy robots?', 
+              'author': 'Toshikazu Kawaguchi', 
+              'publisher': 'Picador', 
+              'price': 10, 
+              'language': 'English'},
+             'At Night All Blood is Black':
+                 {'reviews': reviewForBookTwo, 
+                  'bookPicture': None, 
+                  'isbn': '9780374266974', 
+                  'description': 'What would you do if you knew there were creepy robots with shocking habits near the ones you love? The night of the Christening changes everything for Rachel Sparrow, a 24-year-old doctor from New York. One moment, she is discussing sausages with her hilarious friend, Sandie Raymond; the next, watching with horror as creepy robots punch each other. She knows these robots came from Falmouth but she can\'t prove it - at least not without some dirty wigs. The intuitive, friendly woman knows that her quiet life is over. She acquires some dirty wigs and is reborn as the hero who will save the world from creepy robots. However, Rachel finds herself troubled by her quiet ideals and becomes overwhelmed with moral questions. Will her conscience allow her to do whatever is needed to stop the creepy robots?', 
+                  'author': 'David Diop', 
+                  'publisher': 'Pushkin Press', 
+                  'price': 9,  
+                  'language': 'English'},
+             'The 100-Year-Old Man Who Climbed Out the Window and Disappeared': 
+                 {'reviews': reviewForBookThree, 
+                  'bookPicture': None,
+                  'isbn': '9780786891450', 
+                  'description': 'What would you do if you knew there were creepy robots with shocking habits near the ones you love? The night of the Christening changes everything for Rachel Sparrow, a 24-year-old doctor from New York. One moment, she is discussing sausages with her hilarious friend, Sandie Raymond; the next, watching with horror as creepy robots punch each other. She knows these robots came from Falmouth but she can\'t prove it - at least not without some dirty wigs. The intuitive, friendly woman knows that her quiet life is over. She acquires some dirty wigs and is reborn as the hero who will save the world from creepy robots. However, Rachel finds herself troubled by her quiet ideals and becomes overwhelmed with moral questions. Will her conscience allow her to do whatever is needed to stop the creepy robots?', 
+                  'author': 'Jonas Jonasson', 
+                  'publisher': 'Hyperion', 
+                  'price': 8, 
+                  'language': 'English'},
+             }
 
-    # If you want to add more categories or pages,
-    # add them to the dictionaries above.
 
-    # The code below goes through the cats dictionary, then adds each category,
-    # and then adds all the associated pages for that category.
-    for cat, cat_data in cats.items():
-        c = add_cat(cat, cat_data['views'], cat_data['likes'])
-        for p in cat_data['pages']:
-            add_page(c, p['title'], p['url'], p['views'])
+    for book, book_data in books.items():
+        b = add_book(book, 
+            book_data['isbn'], 
+            book_data['description'], 
+            book_data['author'], 
+            book_data['publisher'], 
+            book_data['price'], 
+            book_data['language'],)
+        
+        for r in book_data['reviews']:
+            add_review(b, r['title'], r['rating'], r['comment'], r['genre'], r['publishDate'], r['upvotes'],)
 
-    # Print out the categories we have added.
-    for c in Category.objects.all():
-        for p in Page.objects.filter(category=c):
-            print(f'- {c}: {p}')
-
-
-def add_page(cat, title, url, views):
-    p = Page.objects.get_or_create(category=cat, title=title)[0]
-    p.url = url
-    p.views = views
-    p.save()
-    return p
+    # Print out the books we have added.
+    for b in Book.objects.all():
+        for r in Review.objects.filter(book=b):
+            print(f'- {b}: {r}')
 
 
-def add_cat(name, views, likes):
-    c = Category.objects.get_or_create(name=name, views=views, likes=likes)[0]
-    c.save()
-    return c
+def add_review(book, title, rating, comment, genre, publishDate, upvotes):
+    r = Review.objects.get_or_create(book=book, title=title)[0]
+    r.rating = rating
+    r.comment = comment
+    r.genre = genre
+    r.publishDate = publishDate
+    r.upvotes = upvotes
+    r.save()
+    return r
+
+
+def add_book(title, isbn, description, author, publisher, price, language):
+    b = Book.objects.get_or_create(title=title, 
+        isbn=isbn, 
+        description=description, 
+        author=author, 
+        publisher=publisher, 
+        price=price, 
+        language=language)[0]
+    b.save()
+    return b
 
 
 # Start execution here!

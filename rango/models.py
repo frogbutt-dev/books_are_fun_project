@@ -1,11 +1,12 @@
+import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Book(models.Model):
     # FK Relationships
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # Max Length Values
     ISBN_MAX_LENGTH = 13
@@ -16,8 +17,8 @@ class Book(models.Model):
     LANG_MAX_LENGTH = 50
 
     # Attributes
-    isbn = models.CharField(max_length=ISBN_MAX_LENGTH, unique=True)
-    title = models.CharField(max_length=TITLE_MAX_LENGTH)
+    isbn = models.CharField(max_length=ISBN_MAX_LENGTH)
+    title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
     description = models.TextField(max_length=DESC_MAX_LENGTH)
     author = models.CharField(max_length=AUTHOR_MAX_LENGTH)
     publisher = models.CharField(max_length=PUB_MAX_LENGTH)
@@ -29,7 +30,7 @@ class Book(models.Model):
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.title)
         super(Book, self).save(*args, **kwargs)
 
     # To string
@@ -39,8 +40,7 @@ class Book(models.Model):
 
 class Review(models.Model):
     # FK Relationships
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    isbn = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
 
     # Max Length Values
     TITLE_MAX_LENGTH = 50
@@ -48,18 +48,18 @@ class Review(models.Model):
     GENRE_MAX_LENGTH = 50
 
     # Attributes
-    title = models.CharField(max_length=TITLE_MAX_LENGTH)
-    rating = models.IntegerField(default=0)
-    genre = models.CharField(max_length=GENRE_MAX_LENGTH)
+    title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
+    rating = models.IntegerField(default=0,validators=[MinValueValidator(0), MaxValueValidator(5)])
     comment = models.TextField(max_length=COMM_MAX_LENGTH, blank=True)
-    publishDate = models.DateField()
+    genre = models.TextField(max_length=GENRE_MAX_LENGTH)
+    publishDate = models.DateField(default=datetime.date.today)
     upvotes = models.IntegerField(default=0)
 
     # Slug
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.title)
         super(Review, self).save(*args, **kwargs)
 
     
@@ -68,13 +68,13 @@ class Review(models.Model):
         return self.title
 
 
-class User(models.Model):
+class UserProfile(models.Model):
     # FK Relationships
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Attributes
     userPicture = models.ImageField(blank=True)
-    joinDate = models.DateField()
+    joinDate = models.DateField(default=datetime.date.today)
 
     def __str__(self):
         return self.user.username

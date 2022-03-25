@@ -2,71 +2,69 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Homepage
+Homepage
 {% endblock %}
 
 {% block body_block %}
-    <div>
-        <div class="jumbotron p-4">
-            <div class="container">
-                <h1 class="jumbotron-heading">Rango says...</h1>
-                <div>
-                    <h2 class="h2">
-                    {% if user.is_authenticated %}
-                        howdy {{ user.username }}!
+<div>
+    <div class="jumbotron p-4">
+        <div class="container">
+            {% if user.is_authenticated %}
+            <h1 class="jumbotron-heading">Welcome back, {{ user.username }}!</h1>
+            {% else %}
+            <h1 class="jumbotron-heading">Welcome to Books Are Fun!</h1>
+            {% endif %}
+            <div>
+                <h5>{{ boldmessage }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-6">
+                <div class="card-body">
+                    <h2>Top Rated Books</h2>
+                    <p class="card-text">
+                        {% if books %}
+                    <ul class="list-group">
+                        {% for book in books %}
+                        <li class="list-group-item">
+                            <a href="{% url 'rango:show_book' book.slug %}">
+                                {{ book.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                     {% else %}
-                        hey there partner!
+                    <strong>There are no books present.</strong>
                     {% endif %}
-                    </h2>
-                <strong>{{ boldmessage }}</strong>
+                    </p>
                 </div>
             </div>
         </div>
-        
-        <div class="container">
-            <div class="row">
-            <div class="col-md-6">
+        <div class="col-md-6">
             <div class="card mb-6">
-            <div class="card-body">
-            <h2>Top Rated Books</h2>
-            <p class="card-text">
-            {% if books %}
-            <ul class="list-group">
-            {% for book in books %}
-            <li class="list-group-item">
-            <a href="{% url 'rango:show_book' book.slug %}">
-            {{ book.title }}</a>
-            </li>
-            {% endfor %}
-            </ul>
-            {% else %}
-            <strong>There are no books present.</strong>
-            {% endif %}
-            </p>
+                <div class="card-body">
+                    <h2>Top Upvoted Reviews</h2>
+                    <p class="card-text">
+                        {% if reviews %}
+                    <ul class="list-group">
+                        {% for review in reviews %}
+                        <li class="list-group-item">
+                            <a href="{% url 'rango:show_book' review.slug %}">{{ review.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <strong>There are no reviews present.</strong>
+                    {% endif %}
+                    </p>
+                </div>
             </div>
-            </div>
-            </div>
-            <div class="col-md-6">
-            <div class="card mb-6">
-            <div class="card-body">
-            <h2>Top Upvoted Reviews</h2>
-            <p class="card-text">
-            {% if reviews %}
-            <ul class="list-group">
-            {% for review in reviews %}
-            <li class="list-group-item">
-                <a href="{{ review.url }}">{{ review.title }}</a>
-        </li>
-        {% endfor %}
-        </ul>
-        {% else %}
-        <strong>There are no reviews present.</strong>
-        {% endif %}
-        </p>
         </div>
-        </div>
-        </div>
-        </div>
-        </div>
+    </div>
+</div>
 
 {% endblock %}
