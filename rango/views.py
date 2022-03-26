@@ -390,5 +390,15 @@ class ListProfilesView(View):
     def get(self, request):
         profiles = UserProfile.objects.all()
         return render(request,
-                        'rango/list_profiles.html',
-                        {'userprofile_list': profiles})
+                    'rango/list_profiles.html',
+                    {'user_profile_list': profiles})
+
+
+@login_required
+def delete_account(request, username):
+    user = User.objects.get(username=username)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('/')
+
+    return render(request, 'profile.html', {'user': user})

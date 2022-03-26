@@ -24,6 +24,13 @@ User Profiles
                         </a>
                     </h4>
                 </div>
+                {% if list_user.picture %}
+                <img src="{{ MEDIA_URL }}{{ list_user.picture }}" width="64" height="64"
+                    alt="{{ list_user.user.username }}'s profile image" />
+                {% else %}
+                <img src="{{ MEDIA_URL }}anon.png" width="64" height="64"
+                    alt="{{ list_user.user.username }}'s profile image" />
+                {% endif %}
                 {% endfor %}
             </div>
         </div>

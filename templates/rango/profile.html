@@ -13,8 +13,13 @@ Profile for {{ selected_user.username }}
 </div>
 <div class="container">
     <div class="row">
-        <img src="{{ MEDIA_URL }}{{ user_profile.picture }}" width="300" height="300"
+        {% if user_profile.picture %}
+        <img src="{{ MEDIA_URL }}{{ user_profile.picture }}" width="200" height="200"
             alt="{{ selected_user.username }}'s profile image" />
+        {% else %}
+        <img src="{{ MEDIA_URL }}anon.png" width="200" height="200"
+            alt="{{ selected_user.username }}'s profile image" />
+        {% endif %}
         <br />
         <div>
             <p>
@@ -26,8 +31,13 @@ Profile for {{ selected_user.username }}
                 {{ form.as_p }}
                 <input type="submit" value="Update" />
             </form>
+            <form action="{% url 'rango:delete_account' selected_user.username %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete Account">
+            </form>
             {% endif %}
         </div>
     </div>
 </div>
+
 {% endblock %}
