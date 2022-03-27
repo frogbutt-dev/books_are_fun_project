@@ -35,7 +35,7 @@ class BookForm(forms.ModelForm):
 
 class ReviewForm(forms.ModelForm):
     title = forms.CharField(max_length=Review.TITLE_MAX_LENGTH, help_text="Enter a title for your review")
-    rating = forms.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    rating = forms.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], help_text="Enter a score between 0 and 5")
     comment = forms.CharField(widget=forms.Textarea, max_length=Review.COMM_MAX_LENGTH, help_text="Enter your review")
     
     class Meta:
