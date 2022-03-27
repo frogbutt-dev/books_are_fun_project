@@ -12,6 +12,8 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from rango.models import UserProfile
+from django.views.generic import ListView
+from django.db.models import Q
 
 
 
@@ -401,6 +403,16 @@ class ListProfilesView(View):
                     'rango/list_profiles.html',
                     {'user_profile_list': profiles})
 
+class SearchResultsView(ListView):
+    model = Book
+    template_name = 'rango/search_results.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get("query")
+        object_list = Book.objects.filter(
+            Q(title__icontains=query) | Q(author__icontains=query)
+        )
+        return object_list
 
 @login_required
 def delete_account(request, username):

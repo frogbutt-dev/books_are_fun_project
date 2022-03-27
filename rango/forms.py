@@ -14,10 +14,10 @@ class BookForm(forms.ModelForm):
     description = forms.CharField(max_length=Book.DESC_MAX_LENGTH,
                                     help_text="Please enter the book description.")
 
-    author = forms.CharField(max_length=Book.AUTHOR_MAX_LENGTH,
+    author = forms.CharField(initial='Unknown', max_length=Book.AUTHOR_MAX_LENGTH,
                                     help_text="Please enter the book author.")
 
-    publisher = forms.CharField(max_length=Book.PUB_MAX_LENGTH,
+    publisher = forms.CharField(initial='Unknown', max_length=Book.PUB_MAX_LENGTH,
                                     help_text="Please enter the book publisher.")
 
     language = forms.CharField(max_length=Book.LANG_MAX_LENGTH,
@@ -30,7 +30,7 @@ class BookForm(forms.ModelForm):
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Book
-        fields = ('title',)
+        fields = ('title','isbn', 'description', 'author', 'publisher', 'language', 'price')
 
 
 class ReviewForm(forms.ModelForm):

@@ -45,14 +45,14 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                     {% endif %}
-                    <form class="form-inline" id="user-form" method="post" action="{% url 'rango:search' %}">
+                    <form class="form-inline" id="user-form" method="get" action="{% url 'rango:search_results' %}">
                         {% csrf_token %}
                 
                         <div class="form-group">
                             <input class="form-control" type="text" size="50" name="query" value="{{ query }}" id="query" />
                         </div>
                 
-                        <button class="btn btn-primary" type="submit" name="submit">Search</button>
+                        <button class="btn btn-primary" type="submit">Search</button>
                     </form>
                 </ul>
             </div>

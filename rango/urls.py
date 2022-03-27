@@ -1,5 +1,6 @@
 from django.urls import path
 from rango import views
+from .views import SearchResultsView
 
 app_name = 'rango'
 
@@ -18,7 +19,7 @@ urlpatterns = [
 
     path('profiles/', views.ListProfilesView.as_view(), name='list_profiles'),
 
-    path('search/', views.search, name='search'),
+    path('search/', SearchResultsView.as_view(), name='search_results'),
 
     path('add_book/', views.AddBookView.as_view(), name='add_book'),
 
