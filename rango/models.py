@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 
 
 class Book(models.Model):
@@ -17,13 +17,13 @@ class Book(models.Model):
     LANG_MAX_LENGTH = 50
 
     # Attributes
-    isbn = models.CharField(max_length=ISBN_MAX_LENGTH)
+    isbn = models.CharField(max_length=ISBN_MAX_LENGTH, validators=[MinLengthValidator(13)])
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
-    description = models.TextField(max_length=DESC_MAX_LENGTH)
+    description = models.CharField(max_length=DESC_MAX_LENGTH)
     author = models.CharField(max_length=AUTHOR_MAX_LENGTH)
     publisher = models.CharField(max_length=PUB_MAX_LENGTH)
     language = models.CharField(max_length=LANG_MAX_LENGTH)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(default=0, decimal_places=2, max_digits=10)
     bookPicture = models.ImageField(blank=True)
 
     # Slug
@@ -44,14 +44,14 @@ class Review(models.Model):
 
     # Max Length Values
     TITLE_MAX_LENGTH = 50
-    COMM_MAX_LENGTH = 1000
+    COMM_MAX_LENGTH = 100
     GENRE_MAX_LENGTH = 50
 
     # Attributes
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
     rating = models.IntegerField(default=0,validators=[MinValueValidator(0), MaxValueValidator(5)])
-    comment = models.TextField(max_length=COMM_MAX_LENGTH, blank=True)
-    genre = models.TextField(max_length=GENRE_MAX_LENGTH)
+    comment = models.CharField(max_length=COMM_MAX_LENGTH, blank=True)
+    genre = models.CharField(max_length=GENRE_MAX_LENGTH)
     publishDate = models.DateField(default=datetime.date.today)
     upvotes = models.IntegerField(default=0)
 

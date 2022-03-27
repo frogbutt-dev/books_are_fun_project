@@ -31,10 +31,12 @@ Profile for {{ selected_user.username }}
                 {{ form.as_p }}
                 <input type="submit" value="Update" />
             </form>
+            <br />
             <form action="{% url 'rango:delete_account' selected_user.username %}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="Delete Account">
+                <button type="submit" class="btn btn-danger">Delete Account</button>
             </form>
+            <br />
             {% endif %}
         </div>
     </div>
