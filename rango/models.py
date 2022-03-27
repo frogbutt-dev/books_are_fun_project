@@ -75,7 +75,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Attributes
-    userPicture = models.ImageField(blank=True)
+    picture = models.ImageField(blank=True)
     joinDate = models.DateField(default=datetime.date.today)
 
     def __str__(self):

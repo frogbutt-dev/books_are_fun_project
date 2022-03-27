@@ -1,0 +1,43 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+Profile for {{ selected_user.username }}
+{% endblock %}
+
+{% block body_block %}
+<div class="jumbotron p-4">
+    <div class="container">
+        <h1 class="jumbotron-heading">{{ selected_user.username }}'s Profile</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        {% if user_profile.picture %}
+        <img src="{{ MEDIA_URL }}{{ user_profile.picture }}" width="200" height="200"
+            alt="{{ selected_user.username }}'s profile image" />
+        {% else %}
+        <img src="{{ MEDIA_URL }}anon.png" width="200" height="200"
+            alt="{{ selected_user.username }}'s profile image" />
+        {% endif %}
+        <br />
+        <div>
+            <p>
+                <strong>Join date: {{ user_profile.joinDate }}</strong>
+            </p>
+            {% if selected_user == user %}
+            <form method="post" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Update" />
+            </form>
+            <form action="{% url 'rango:delete_account' selected_user.username %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete Account">
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

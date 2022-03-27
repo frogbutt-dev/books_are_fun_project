@@ -38,16 +38,22 @@
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:contact_us' %}">Contact Us</a></li>
                     {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_book' %}">Add Book</a>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_password_change' %}">Change Password</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_book' %}">Add Book</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:profile' user.username %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:list_profiles' %}">List Profiles</a></li>
                     {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                     {% endif %}
-                    <li class="nav-item"><input class="form-control mr-sm-2" type="text" placeholder="Search"></li>
-                    <li class="nav-item"><button class="btn btn-primary" type="submit">Search</button></li>
+                    <form class="form-inline" id="user-form" method="post" action="{% url 'rango:search' %}">
+                        {% csrf_token %}
+                
+                        <div class="form-group">
+                            <input class="form-control" type="text" size="50" name="query" value="{{ query }}" id="query" />
+                        </div>
+                
+                        <button class="btn btn-primary" type="submit" name="submit">Search</button>
+                    </form>
                 </ul>
             </div>
         </nav>
