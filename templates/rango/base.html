@@ -37,24 +37,24 @@
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:books' %}">Books</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:contact_us' %}">Contact Us</a></li>
-                    {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_book' %}">Add Book</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:profile' user.username %}">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:list_profiles' %}">List Profiles</a></li>
-                    {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
-                    <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
-                    {% endif %}
                     <form class="form-inline" id="user-form" method="get" action="{% url 'rango:search_results' %}">
                         {% csrf_token %}
                 
-                        <div class="form-group">
-                            <input class="form-control" type="text" size="50" name="query" value="{{ query }}" id="query" />
+                        <div class="form-inline">
+                            <input class="form-control" type="text" size="50" name="query" value="{{ query }}" id="query" placeholder="Enter book name..."/>
                         </div>
                 
                         <button class="btn btn-primary" type="submit">Search</button>
                     </form>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_book' %}">Add Book</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:list_profiles' %}">List Profiles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:profile' user.username %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
