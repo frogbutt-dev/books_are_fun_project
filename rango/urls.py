@@ -23,6 +23,8 @@ urlpatterns = [
 
     path('add_book/', views.AddBookView.as_view(), name='add_book'),
 
+    path('books/', views.list_books, name='books'),
+
     path('<slug:book_title_slug>/', views.show_book, name='show_book'),
 
     path('<slug:book_title_slug>/leave_review/',

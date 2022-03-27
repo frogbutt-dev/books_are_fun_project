@@ -29,8 +29,8 @@ class MyRegistrationView(RegistrationView):
 
 
 urlpatterns = [
-        path('', include('rango.urls'), name='index'),
         path('admin/', admin.site.urls),
+        path('', include('rango.urls'), name='index'),
         
         # New line below -- don't forget the slash after register!
         path('accounts/register/',

@@ -46,6 +46,13 @@ def about(request):
     response = render(request, 'rango/about.html', context=context_dict)
     return response
 
+def list_books(request):
+    book_list = Book.objects.order_by('-score')
+    context_dict = {}
+    context_dict['books'] = book_list
+    response = render(request, 'rango/books.html', context=context_dict)
+
+    return response
 
 def show_book(request, book_title_slug):
     # Create a context dictionary which we can pass

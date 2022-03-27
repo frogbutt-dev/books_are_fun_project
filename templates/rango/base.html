@@ -34,6 +34,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
+                    <li class="nav-item "><a class="nav-link" href="{% url 'rango:books' %}">Books</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
                     <li class="nav-item "><a class="nav-link" href="{% url 'rango:contact_us' %}">Contact Us</a></li>
                     {% if user.is_authenticated %}
