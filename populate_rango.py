@@ -7,9 +7,12 @@ import django
 django.setup()
 import datetime
 from rango.models import Book, Review
+from django.contrib.auth.models import User
 
 
 def populate():
+    my_user = User.objects.create(username='Testuser', email='', password='test123')
+    my_user.save()
 
     reviewForBookOne = [
         {'title': 'Fantastic read',
@@ -18,12 +21,6 @@ def populate():
          'genre': 'Horror',
          'publishDate': datetime.date(1997, 10, 19),
          'upvotes': 11, },
-        {'title': 'Highly interesting',
-         'rating': 5,
-         'comment': 'A very interesting book.',
-         'genre': 'Horror',
-         'publishDate': datetime.date(1997, 10, 21),
-         'upvotes': 3, },
     ]
 
     reviewForBookTwo = [
@@ -79,8 +76,7 @@ def populate():
               'author': 'Toshikazu Kawaguchi', 
               'publisher': 'Picador', 
               'price': 10, 
-              'language': 'English',
-              'score' : 5.0},
+              'language': 'English'},
              'At Night All Blood is Black':
                  {'reviews': reviewForBookTwo, 
                   'bookPicture': None, 
@@ -89,8 +85,7 @@ def populate():
                   'author': 'David Diop', 
                   'publisher': 'Pushkin Press', 
                   'price': 9,  
-                  'language': 'English',
-                  'score' : 2.5},
+                  'language': 'English'},
              'The 100-Year-Old Man Who Climbed Out the Window and Disappeared': 
                  {'reviews': reviewForBookThree, 
                   'bookPicture': None,
@@ -99,8 +94,7 @@ def populate():
                   'author': 'Jonas Jonasson', 
                   'publisher': 'Hyperion', 
                   'price': 8, 
-                  'language': 'English',
-                  'score' : 3.0},
+                  'language': 'English'},
              'It Ends With Us': 
                  {'reviews': reviewForBookFour, 
                   'bookPicture': None,
@@ -109,8 +103,7 @@ def populate():
                   'author': 'Colleen Hoover', 
                   'publisher': 'Simon & Schuster UK', 
                   'price': 5, 
-                  'language': 'English',
-                  'score' : 4.0},
+                  'language': 'English'},
              'Why Has Nobody Told Me This Before?': 
                  {'reviews': reviewForBookFive, 
                   'bookPicture': None,
@@ -119,8 +112,7 @@ def populate():
                   'author': 'Dr Julie Smith', 
                   'publisher': 'Michael Joseph', 
                   'price': 7.49, 
-                  'language': 'English',
-                  'score' : 3.5},
+                  'language': 'English'},
              'Naruto Volume 1': 
                  {'reviews': reviewForBookSix, 
                   'bookPicture': None,
@@ -129,8 +121,7 @@ def populate():
                   'author': 'Masashi Kishimoto', 
                   'publisher': 'Viz LLC', 
                   'price': 6.99, 
-                  'language': 'English',
-                  'score' : 4.5},
+                  'language': 'English'},
              }
 
 
@@ -141,11 +132,10 @@ def populate():
             book_data['author'], 
             book_data['publisher'], 
             book_data['price'], 
-            book_data['language'],
-            book_data['score'],)
+            book_data['language'],)
         
         for r in book_data['reviews']:
-            add_review(b, r['title'], r['rating'], r['comment'], r['genre'], r['publishDate'], r['upvotes'],)
+            add_review(b, my_user, r['title'], r['rating'], r['comment'], r['genre'], r['publishDate'], r['upvotes'],)
 
     # Print out the books we have added.
     for b in Book.objects.all():
@@ -153,8 +143,8 @@ def populate():
             print(f'- {b}: {r}')
 
 
-def add_review(book, title, rating, comment, genre, publishDate, upvotes):
-    r = Review.objects.get_or_create(book=book, title=title)[0]
+def add_review(book, user, title, rating, comment, genre, publishDate, upvotes):
+    r = Review.objects.update_or_create(book=book, title=title, user=user)[0]
     r.rating = rating
     r.comment = comment
     r.genre = genre
@@ -164,15 +154,14 @@ def add_review(book, title, rating, comment, genre, publishDate, upvotes):
     return r
 
 
-def add_book(title, isbn, description, author, publisher, price, language, score):
+def add_book(title, isbn, description, author, publisher, price, language):
     b = Book.objects.get_or_create(title=title, 
         isbn=isbn, 
         description=description, 
         author=author, 
         publisher=publisher, 
         price=price, 
-        language=language,
-        score=score,)[0]
+        language=language,)[0]
     b.save()
     return b
 

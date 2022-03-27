@@ -35,6 +35,19 @@ class Book(models.Model):
         self.slug = slugify(self.title)
         super(Book, self).save(*args, **kwargs)
 
+    def updateScore(self, book):
+        reviews = book.review_set.all()
+        numberOfReviews = len(reviews)
+
+        if(numberOfReviews != 0):
+            sum = 0
+
+            for r in reviews:
+                sum += r.rating
+            
+            self.score = sum/numberOfReviews
+            self.save()
+
     # To string
     def __str__(self):
         return self.title
@@ -43,6 +56,7 @@ class Book(models.Model):
 class Review(models.Model):
     # FK Relationships
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # Max Length Values
     TITLE_MAX_LENGTH = 50
@@ -60,9 +74,14 @@ class Review(models.Model):
     # Slug
     slug = models.SlugField(unique=True)
 
+    # Links user and book so that a user cannot have more than 1 review per book
+    class Meta:
+        unique_together = ('book','user')
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Review, self).save(*args, **kwargs)
+        self.book.updateScore(book=self.book)
 
     
     # To string

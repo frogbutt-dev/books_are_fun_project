@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.shortcuts import render
 #from django.http import HttpResponse
 from rango.models import Book, Review
@@ -108,7 +109,7 @@ def leave_review(request, book_title_slug):
 
     # You cannot add a page to a Category that does not exist...
     if book is None:
-        return redirect('/rango/')
+        return redirect('')
 
     form = ReviewForm()
 
@@ -117,14 +118,20 @@ def leave_review(request, book_title_slug):
 
         if form.is_valid():
             if book:
-                review = form.save(commit=False)
-                review.book = book
-                review.upvotes = 0
-                review.save()
+                try:
+                    review = form.save(commit=False)
+                    review.book = book
+                    review.upvotes = 0
+                    review.user = request.user
+                    review.save()
 
-                return redirect(reverse('rango:show_book',
-                                        kwargs={'book_title_slug':
-                                                book_title_slug}))
+                    return redirect(reverse('rango:show_book',
+                                            kwargs={'book_title_slug':
+                                                    book_title_slug}))
+                except IntegrityError:
+                    return redirect(reverse('rango:show_book',
+                                            kwargs={'book_title_slug':
+                                                    book_title_slug}))
 
     else:
         print(form.errors)
