@@ -18,7 +18,6 @@ def populate():
         {'title': 'Fantastic read',
          'rating': 4,
          'comment': 'The story took me back to my childhood.',
-         'genre': 'Horror',
          'publishDate': datetime.date(1997, 10, 19),
          'upvotes': 11, },
     ]
@@ -27,7 +26,6 @@ def populate():
         {'title': 'Brilliant book',
          'rating': 5,
          'comment': 'I loved reading it!',
-         'genre': 'Sci-fi',
          'publishDate': datetime.date(1997, 10, 19),
          'upvotes': 23, },
     ]
@@ -36,7 +34,6 @@ def populate():
         {'title': 'Boring story',
          'rating': 2,
          'comment': 'I did not enjoy reading this book. It was very boring.',
-         'genre': 'Romantic',
          'publishDate': datetime.date(1997, 10, 19),
          'upvotes': 0, },
     ]
@@ -45,7 +42,6 @@ def populate():
         {'title': 'I loooved it',
          'rating': 1,
          'comment': 'I did not enjoy reading this book. It was very boring.',
-         'genre': 'Romantic',
          'publishDate': datetime.date(2008, 10, 1),
          'upvotes': 3, },
     ]
@@ -54,7 +50,6 @@ def populate():
         {'title': 'Amazing. I became Buddha.',
          'rating': 5,
          'comment': 'The colours on the cover enlightened me.',
-         'genre': 'Therapy',
          'publishDate': datetime.date(1997, 10, 19),
          'upvotes': 500, },
     ]
@@ -63,7 +58,6 @@ def populate():
         {'title': 'Mid',
          'rating': 3,
          'comment': 'I did not like it or dislike it. One Piece is better.',
-         'genre': 'Adventure',
          'publishDate': datetime.date(2000, 1, 5),
          'upvotes': 25, },
     ]
@@ -135,7 +129,7 @@ def populate():
             book_data['language'],)
         
         for r in book_data['reviews']:
-            add_review(b, my_user, r['title'], r['rating'], r['comment'], r['genre'], r['publishDate'], r['upvotes'],)
+            add_review(b, my_user, r['title'], r['rating'], r['comment'], r['publishDate'], r['upvotes'],)
 
     # Print out the books we have added.
     for b in Book.objects.all():
@@ -143,11 +137,10 @@ def populate():
             print(f'- {b}: {r}')
 
 
-def add_review(book, user, title, rating, comment, genre, publishDate, upvotes):
+def add_review(book, user, title, rating, comment, publishDate, upvotes):
     r = Review.objects.update_or_create(book=book, title=title, user=user)[0]
     r.rating = rating
     r.comment = comment
-    r.genre = genre
     r.publishDate = publishDate
     r.upvotes = upvotes
     r.save()

@@ -61,13 +61,11 @@ class Review(models.Model):
     # Max Length Values
     TITLE_MAX_LENGTH = 50
     COMM_MAX_LENGTH = 1000
-    GENRE_MAX_LENGTH = 50
 
     # Attributes
-    title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
+    title = models.CharField(max_length=TITLE_MAX_LENGTH)
     rating = models.IntegerField(default=0,validators=[MinValueValidator(0), MaxValueValidator(5)])
     comment = models.TextField(max_length=COMM_MAX_LENGTH, blank=True)
-    genre = models.TextField(max_length=GENRE_MAX_LENGTH)
     publishDate = models.DateField(default=datetime.date.today)
     upvotes = models.IntegerField(default=0)
 
