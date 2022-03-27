@@ -1,6 +1,7 @@
 from django import forms
 from rango.models import Review, Book, UserProfile
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class BookForm(forms.ModelForm):
@@ -33,6 +34,10 @@ class BookForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
+    title = forms.CharField(max_length=Review.TITLE_MAX_LENGTH, help_text="Enter a title for your review")
+    rating = forms.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    comment = forms.CharField(widget=forms.Textarea, max_length=Review.COMM_MAX_LENGTH, help_text="Enter your review")
+    
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Review
@@ -44,7 +49,7 @@ class ReviewForm(forms.ModelForm):
         # we can either exclude the category field from the form,
         #exclude = ('category',)
         # or specify the fields to include (don't include the category field).
-        fields = ['title', 'rating', 'comment', 'genre', ]
+        fields = ['title', 'rating', 'comment',]
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
