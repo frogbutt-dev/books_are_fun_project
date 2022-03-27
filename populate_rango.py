@@ -80,7 +80,7 @@ def populate():
               'publisher': 'Picador', 
               'price': 10, 
               'language': 'English',
-              'rating' : 5.0},
+              'score' : 5.0},
              'At Night All Blood is Black':
                  {'reviews': reviewForBookTwo, 
                   'bookPicture': None, 
@@ -90,7 +90,7 @@ def populate():
                   'publisher': 'Pushkin Press', 
                   'price': 9,  
                   'language': 'English',
-                  'rating' : 2.5},
+                  'score' : 2.5},
              'The 100-Year-Old Man Who Climbed Out the Window and Disappeared': 
                  {'reviews': reviewForBookThree, 
                   'bookPicture': None,
@@ -100,7 +100,7 @@ def populate():
                   'publisher': 'Hyperion', 
                   'price': 8, 
                   'language': 'English',
-                  'rating' : 3.0},
+                  'score' : 3.0},
              'It Ends With Us': 
                  {'reviews': reviewForBookFour, 
                   'bookPicture': None,
@@ -110,7 +110,7 @@ def populate():
                   'publisher': 'Simon & Schuster UK', 
                   'price': 5, 
                   'language': 'English',
-                  'rating' : 4.0},
+                  'score' : 4.0},
              'Why Has Nobody Told Me This Before?': 
                  {'reviews': reviewForBookFive, 
                   'bookPicture': None,
@@ -120,7 +120,7 @@ def populate():
                   'publisher': 'Michael Joseph', 
                   'price': 7.49, 
                   'language': 'English',
-                  'rating' : 3.5},
+                  'score' : 3.5},
              'Naruto Volume 1': 
                  {'reviews': reviewForBookSix, 
                   'bookPicture': None,
@@ -130,7 +130,7 @@ def populate():
                   'publisher': 'Viz LLC', 
                   'price': 6.99, 
                   'language': 'English',
-                  'rating' : 4.5},
+                  'score' : 4.5},
              }
 
 
@@ -142,7 +142,7 @@ def populate():
             book_data['publisher'], 
             book_data['price'], 
             book_data['language'],
-            book_data['rating'],),
+            book_data['score'],)
         
         for r in book_data['reviews']:
             add_review(b, r['title'], r['rating'], r['comment'], r['genre'], r['publishDate'], r['upvotes'],)
@@ -164,7 +164,7 @@ def add_review(book, title, rating, comment, genre, publishDate, upvotes):
     return r
 
 
-def add_book(title, isbn, description, author, publisher, price, language, rating,):
+def add_book(title, isbn, description, author, publisher, price, language, score):
     b = Book.objects.get_or_create(title=title, 
         isbn=isbn, 
         description=description, 
@@ -172,7 +172,7 @@ def add_book(title, isbn, description, author, publisher, price, language, ratin
         publisher=publisher, 
         price=price, 
         language=language,
-        rating=rating,)[0]
+        score=score,)[0]
     b.save()
     return b
 

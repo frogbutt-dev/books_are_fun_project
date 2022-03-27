@@ -15,7 +15,7 @@ class Book(models.Model):
     AUTHOR_MAX_LENGTH = 50
     PUB_MAX_LENGTH = 50
     LANG_MAX_LENGTH = 50
-    RATING_MAX_LENGTH = 50
+    SCORE_MAX_LENGTH = 50
 
     # Attributes
     isbn = models.CharField(max_length=ISBN_MAX_LENGTH)
@@ -26,7 +26,7 @@ class Book(models.Model):
     language = models.CharField(max_length=LANG_MAX_LENGTH)
     price = models.IntegerField(default=0)
     bookPicture = models.ImageField(blank=True)
-    rating = models.FloatField(default=0)
+    score = models.FloatField(default=0)
 
     # Slug
     slug = models.SlugField(unique=True)
