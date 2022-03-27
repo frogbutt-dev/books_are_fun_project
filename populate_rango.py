@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'books_are_fun_project.settings')
@@ -43,6 +44,33 @@ def populate():
          'upvotes': 0, },
     ]
 
+    reviewForBookFour = [
+        {'title': 'I loooved it',
+         'rating': 1,
+         'comment': 'I did not enjoy reading this book. It was very boring.',
+         'genre': 'Romantic',
+         'publishDate': datetime.date(2008, 10, 1),
+         'upvotes': 3, },
+    ]
+
+    reviewForBookFive = [
+        {'title': 'Amazing. I became Buddha.',
+         'rating': 5,
+         'comment': 'The colours on the cover enlightened me.',
+         'genre': 'Therapy',
+         'publishDate': datetime.date(1997, 10, 19),
+         'upvotes': 500, },
+    ]
+
+    reviewForBookSix = [
+        {'title': 'Mid',
+         'rating': 3,
+         'comment': 'I did not like it or dislike it. One Piece is better.',
+         'genre': 'Adventure',
+         'publishDate': datetime.date(2000, 1, 5),
+         'upvotes': 25, },
+    ]
+
     books = {'Before The Coffee Gets Cold': 
              {'reviews': reviewForBookOne, 
               'bookPicture': None, 
@@ -51,7 +79,8 @@ def populate():
               'author': 'Toshikazu Kawaguchi', 
               'publisher': 'Picador', 
               'price': 10, 
-              'language': 'English'},
+              'language': 'English',
+              'rating' : 5.0},
              'At Night All Blood is Black':
                  {'reviews': reviewForBookTwo, 
                   'bookPicture': None, 
@@ -60,7 +89,8 @@ def populate():
                   'author': 'David Diop', 
                   'publisher': 'Pushkin Press', 
                   'price': 9,  
-                  'language': 'English'},
+                  'language': 'English',
+                  'rating' : 2.5},
              'The 100-Year-Old Man Who Climbed Out the Window and Disappeared': 
                  {'reviews': reviewForBookThree, 
                   'bookPicture': None,
@@ -69,7 +99,38 @@ def populate():
                   'author': 'Jonas Jonasson', 
                   'publisher': 'Hyperion', 
                   'price': 8, 
-                  'language': 'English'},
+                  'language': 'English',
+                  'rating' : 3.0},
+             'It Ends With Us': 
+                 {'reviews': reviewForBookFour, 
+                  'bookPicture': None,
+                  'isbn': '9781471156267', 
+                  'description': 'SOMETIMES THE ONE WHO LOVES YOU IS THE ONE WHO HURTS YOU THE MOST.', 
+                  'author': 'Colleen Hoover', 
+                  'publisher': 'Simon & Schuster UK', 
+                  'price': 5, 
+                  'language': 'English',
+                  'rating' : 4.0},
+             'Why Has Nobody Told Me This Before?': 
+                 {'reviews': reviewForBookFive, 
+                  'bookPicture': None,
+                  'isbn': '9780241529713', 
+                  'description': "Drawing on years of experience as a clinical psychologist, online sensation Dr Julie Smith shares all the skills you need to get through life's ups and downs.", 
+                  'author': 'Dr Julie Smith', 
+                  'publisher': 'Michael Joseph', 
+                  'price': 7.49, 
+                  'language': 'English',
+                  'rating' : 3.5},
+             'Naruto Volume 1': 
+                 {'reviews': reviewForBookSix, 
+                  'bookPicture': None,
+                  'isbn': '9781569319000', 
+                  'description': 'Twelve years ago the Village Hidden in the Leaves was attacked by a fearsome threat. A nine-tailed fox spirit claimed the life of the village leader, the Hokage, and many others. Today, the village is at peace and a troublemaking kid named Naruto is struggling to graduate from Ninja Academy. His goal may be to become the next Hokage, but his true destiny will be much more complicated. The adventure begins now! For teen audiences.', 
+                  'author': 'Masashi Kishimoto', 
+                  'publisher': 'Viz LLC', 
+                  'price': 6.99, 
+                  'language': 'English',
+                  'rating' : 4.5},
              }
 
 
@@ -80,7 +141,8 @@ def populate():
             book_data['author'], 
             book_data['publisher'], 
             book_data['price'], 
-            book_data['language'],)
+            book_data['language'],
+            book_data['rating'],),
         
         for r in book_data['reviews']:
             add_review(b, r['title'], r['rating'], r['comment'], r['genre'], r['publishDate'], r['upvotes'],)
@@ -102,14 +164,15 @@ def add_review(book, title, rating, comment, genre, publishDate, upvotes):
     return r
 
 
-def add_book(title, isbn, description, author, publisher, price, language):
+def add_book(title, isbn, description, author, publisher, price, language, rating,):
     b = Book.objects.get_or_create(title=title, 
         isbn=isbn, 
         description=description, 
         author=author, 
         publisher=publisher, 
         price=price, 
-        language=language)[0]
+        language=language,
+        rating=rating,)[0]
     b.save()
     return b
 

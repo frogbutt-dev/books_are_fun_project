@@ -14,7 +14,7 @@ def index(request):
     # Retrieve the top 5 only -- or all if less than 5.
     # Place the list in our context_dict dictionary (with our boldmessage!)
     # that will be passed to the template engine.
-    book_list = Book.objects.all()
+    book_list = Book.objects.order_by('-rating')[:5]
     review_list = Review.objects.order_by('-upvotes')[:5]
 
     context_dict = {}
@@ -125,6 +125,7 @@ def leave_review(request, book_title_slug):
 
     context_dict = {'form': form, 'book': book}
     return render(request, 'rango/leave_review.html', context=context_dict)
+
 
 # def register(request):
 #     # A boolean value for telling the template
