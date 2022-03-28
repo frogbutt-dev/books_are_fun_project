@@ -16,26 +16,28 @@ Books
 </div>
 
 <body>
-    <ol class="container">
-        {% if books %}
-            <hr width="100%">
-            {% for b in books %}
-                {% if b == current_book %}
-                    <a href="{% url 'rango:show_book' b.slug %}">
-                        "{{ b.title }}" by {{ b.author }}
-                    </a>
-                {% else %}
-                    <a href="{% url 'rango:show_book' b.slug %}">
-                        "{{ b.title }}" by {{ b.author }}
-                    </a>
-                {% endif %}
-                | Score: {{ b.score }}
-                <hr width="100%">
-            {% endfor %}
-        {% else %}
-        <li class="nav-item">There are no books present.</li>
-        {% endif %}
-    </ol>
+    <div class="panel-body">
+        <div class="list-group">
+            {% if books %}
+                {% for b in books %}
+                    <li class="list-group-item">
+                    {% if b == current_book %}
+                        <a href="{% url 'rango:show_book' b.slug %}">
+                            "{{ b.title }}" by {{ b.author }}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'rango:show_book' b.slug %}">
+                            "{{ b.title }}" by {{ b.author }}
+                        </a>
+                    {% endif %}
+                    <b class="float-right">| Score: {{ b.score }}</b>
+                    </li>
+                {% endfor %}
+            {% else %}
+            <li class="nav-item">There are no books present.</li>
+            {% endif %}
+        </div>
+    </div>
 </body>
 
 {% endblock %}

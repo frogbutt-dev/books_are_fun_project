@@ -17,20 +17,22 @@ User Profiles
         <div class="panel-body">
             <div class="list-group">
                 {% for list_user in user_profile_list %}
-                <div class="list-group-item">
-                    <h4 class="list-group-item-heading">
-                        <a href="{% url 'rango:profile' list_user.user.username %}">
-                            {{ list_user.user.username }}
-                        </a>
-                    </h4>
-                </div>
-                {% if list_user.picture %}
-                <img src="{{ MEDIA_URL }}{{ list_user.picture }}" width="64" height="64"
-                    alt="{{ list_user.user.username }}'s profile image" />
-                {% else %}
-                <img src="{% static 'images/anon.png' %}" width="64" height="64"
-                    alt="{{ list_user.user.username }}'s profile image" />
-                {% endif %}
+                    <ls>
+                    <div class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                            <a href="{% url 'rango:profile' list_user.user.username %}">
+                                {{ list_user.user.username }}
+                            </a>
+                        </h4>
+                    
+                    {% if list_user.picture %}
+                    <img src="{{ MEDIA_URL }}{{ list_user.picture }}" width="64" height="64"
+                        alt="{{ list_user.user.username }}'s profile image" />
+                    {% else %}
+                    <img src="{% static 'images/anon.png' %}" width="64" height="64"
+                        alt="{{ list_user.user.username }}'s profile image" />
+                    {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
