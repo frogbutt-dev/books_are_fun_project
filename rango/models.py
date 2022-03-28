@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, int_list_validator
 
 
 class Book(models.Model):
@@ -18,13 +18,13 @@ class Book(models.Model):
     SCORE_MAX_LENGTH = 50
 
     # Attributes
-    isbn = models.CharField(max_length=ISBN_MAX_LENGTH)
+    isbn = models.CharField(max_length=ISBN_MAX_LENGTH, validators=[MinLengthValidator(13), int_list_validator(sep='')])
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
     description = models.TextField(max_length=DESC_MAX_LENGTH)
-    author = models.CharField(max_length=AUTHOR_MAX_LENGTH, default='Unknown')
-    publisher = models.CharField(max_length=PUB_MAX_LENGTH, default='Unknown')
+    author = models.CharField(max_length=AUTHOR_MAX_LENGTH)
+    publisher = models.CharField(max_length=PUB_MAX_LENGTH)
     language = models.CharField(max_length=LANG_MAX_LENGTH)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(default=0, decimal_places=2, max_digits=10)
     bookPicture = models.ImageField(blank=True)
     score = models.FloatField(default=0)
 

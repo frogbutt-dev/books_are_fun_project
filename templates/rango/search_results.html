@@ -7,21 +7,26 @@ Search
 
 {% block body_block %}
 <div class="jumbotron p-4">
-    <div class="container">
-        <h1 class="jumbotron-heading">Search Results:</h1>
-    </div>
+  <div class="container">
+    <h1 class="jumbotron-heading">Search Results:</h1>
+  </div>
 </div>
 <div>
-    <ul>
-        {% if object_list %}
-          {% for book in object_list %}
-            <li>
-              <a  href="{% url 'rango:show_book' book.slug %}">{{  book.title }}, {{ book.author }}</a>
-            </li>
-          {% endfor %}
-        {% else %}
-            No match found. <a  href="{% url 'rango:index' %}">Return to front page.</a>
-        {% endif %}
-      </ul>
+  <ul>
+    {% if object_list %}
+    {% for book in object_list %}
+    <li>
+      <a href="{% url 'rango:show_book' book.slug %}">{{ book.title }}, {{ book.author }}</a>
+    </li>
+    {% endfor %}
+    {% else %}
+    {% if user.is_authenticated %}
+    No match found. <a href="{% url 'rango:add_book' %}"><Strong>Add a new book to our website!</Strong></a>
+    {% else %}
+    No match found. <a href="{% url 'rango:register_profile' %}"><strong>Log in</strong></a> to add new books to our website. Alternatively, return to <a
+      href="{% url 'rango:index' %}"><Strong>Homepage</Strong>.</a>
+    {% endif %}
+    {% endif %}
+  </ul>
 </div>
 {% endblock %}

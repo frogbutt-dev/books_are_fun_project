@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block title_block %}
-Profile for {{ selected_user.username }}
+{{ selected_user.username }}'s Profile
 {% endblock %}
 
 {% block body_block %}
@@ -17,7 +17,7 @@ Profile for {{ selected_user.username }}
         <img src="{{ MEDIA_URL }}{{ user_profile.picture }}" width="200" height="200"
             alt="{{ selected_user.username }}'s profile image" />
         {% else %}
-        <img src="{{ MEDIA_URL }}anon.png" width="200" height="200"
+        <img src="{% static 'images/anon.png' %}" width="200" height="200"
             alt="{{ selected_user.username }}'s profile image" />
         {% endif %}
         <br />
@@ -31,13 +31,31 @@ Profile for {{ selected_user.username }}
                 {{ form.as_p }}
                 <input type="submit" value="Update" />
             </form>
+            <br />
             <form action="{% url 'rango:delete_account' selected_user.username %}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="Delete Account">
+                <button type="submit" class="btn btn-danger">Delete Account</button>
             </form>
+            <br />
             {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-6">
+                <div class="card-body">
+                    <h2>Reviews posted: {{ reviews.count }}</h2>
+                    <p class="card-text">
+                    <ul class="list-group">
+                        {% for review in reviews %}
+                        <li class="list-group-item">
+                            <a href="{% url 'rango:show_book' review.book.slug %}">{{ review.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
