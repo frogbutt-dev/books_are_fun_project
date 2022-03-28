@@ -263,11 +263,17 @@ class SearchResultsView(ListView):
     template_name = 'rango/search_results.html'
 
     def get_queryset(self):
-        query = self.request.GET.get("query")
-        object_list = Book.objects.filter(
-            Q(title__icontains=query) | Q(author__icontains=query)
-        )
-        return object_list
+        query = self.request.GET.get("query").split()
+        
+        object_list = list()
+        for word in query:
+            title_results = list(Book.objects.filter(Q(title__icontains=word)))
+            author_results = list(Book.objects.filter(Q(author__icontains=word)))
+            isbn_results = list(Book.objects.filter(Q(isbn__icontains=word)))
+
+            object_list += title_results + author_results + isbn_results
+
+        return list(set(object_list))
 
 
 
@@ -301,12 +307,11 @@ def visitor_cookie_handler(request):
 def search(request):
     context_dict = {}
     if request.method == 'POST':
-        if request.method == 'POST':
-            query = request.POST['query'].strip()
+        query = request.POST['query'].strip()
 
-            if query:
-                context_dict['result_list'] = run_query(query)
-                context_dict['query'] = query
+        if query:
+            context_dict['result_list'] = run_query(query)
+            context_dict['query'] = query
     return render(request, 'rango/search.html', context=context_dict)
 
 
