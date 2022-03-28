@@ -47,7 +47,7 @@ class IndexViewTests(TestCase):
         self.assertContains(response, "Shrek")
         self.assertContains(response, "Naruto")
 
-    def test_index_view_with_books_context(self):
+    def test_index_view_with_books_count(self):
         add_book('Harry Potter')
         add_book('Shrek')
         add_book('Naruto')
@@ -85,7 +85,7 @@ class ListProfilesViewTests(TestCase):
         response = self.client.get(reverse('rango:list_profiles'))
         self.assertEqual(response.status_code, 200)
 
-    def test_list_profiles_view_with_users_context(self):
+    def test_list_profiles_view_with_users_count(self):
         user_one_name, user_two_name = "Jerry", "Tom"
         user_one_pw, user_two_pw = "tompassword123", "tompassword123"
         create_user_profile(user_one_name, user_one_pw, self)
@@ -93,8 +93,6 @@ class ListProfilesViewTests(TestCase):
         response = self.client.get(reverse('rango:list_profiles'))
         num_profiles = len(response.context['user_profile_list'])
         self.assertEquals(num_profiles, 2)
-        self.assertContains(response, "Jerry")
-        self.assertContains(response, "Tom")
 
     def test_list_profiles_view_with_users_names(self):
         user_one_name, user_two_name = "Jerry", "Tom"
@@ -116,7 +114,7 @@ class ProfileViewTests(TestCase):
         response = self.client.get(reverse('rango:profile', kwargs={'username': user_one.user.username}))
         self.assertEqual(response.status_code, 200)
 
-    def test_user_profile_view_with_reviews_context(self):
+    def test_user_profile_view_with_reviews_count(self):
         book_one = add_book('Naruto')
         book_two = add_book('Mr Bean')
         user_one = create_user_profile("Mario", "mariopassword123", self)
