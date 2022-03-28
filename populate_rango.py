@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'books_are_fun_project.settings')
