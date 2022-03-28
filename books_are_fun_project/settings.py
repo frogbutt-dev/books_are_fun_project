@@ -28,7 +28,7 @@ SECRET_KEY = 'on99is8o965nl#bql247z*76wx28gd52hc%6h2-ruj-u_cs31_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['booksarefun.pythonanywhere.com']
 
 
 # Application definition
