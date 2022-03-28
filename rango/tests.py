@@ -139,12 +139,46 @@ class LeaveReviewViewTests(TestCase):
         self.assertContains(response, book_one.slug)
 
 
+class BooksViewTests(TestCase):
+    def test_books_view_with_book_status(self):
+        add_book("Naruto Vol 1")
+        response = self.client.get(reverse('rango:books'))
+        self.assertEqual(response.status_code, 200)
+    
+    def test_books_view_with_book_title(self):
+        book_one = add_book("Naruto Vol 1")
+        response = self.client.get(reverse('rango:books'))
+        self.assertContains(response, book_one.slug)
+
+    def test_books_view_with_book_count(self):
+        add_book("Naruto Vol 1")
+        add_book("Mario")
+        add_book("Pokemon")
+        add_book("Kirby")
+        add_book("Princess Peach")
+        response = self.client.get(reverse('rango:books'))
+        num_books = len(response.context['books'])
+        self.assertEqual(num_books, 5)
+
+    def test_books_view_with_book_top_score(self):
+        top_score = 23
+        add_book("Naruto Vol 1", 10)
+        add_book("Mario", 7)
+        add_book("Pokemon", top_score)
+        add_book("Kirby")
+        add_book("Princess Peach", 2)
+        response = self.client.get(reverse('rango:books'))
+        max_score = response.context['books'][0].score
+        self.assertEqual(max_score, top_score)
+
+    
 
 
 # Helper Methods
 
-def add_book(title):
+def add_book(title, score=0):
     book = Book.objects.get_or_create(title=title)[0]
+    book.score = score
     book.save()
     return book
 
